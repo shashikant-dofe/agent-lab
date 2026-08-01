@@ -9,6 +9,12 @@ class Settings(BaseSettings):
     environment: str
     log_level: str
     database_url: str
+    llm_provider: str = "openai"
+    openai_api_key: str = ""
+    openai_model: str = "gpt-4.1-mini"
+
+    ollama_base_url: str = "http://localhost:11434"
+    ollama_model: str = "llama3.2"
     
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",

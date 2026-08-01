@@ -12,10 +12,10 @@ from app.schemas.conversation import (
 class ConversationRepository:
     def __init__(self, db: Session):
             self.db = db
-        def create(
-        self,
-        conversation_data: ConversationCreate,
-    ) -> Conversation:
+    def create(
+    self,
+    conversation_data: ConversationCreate,
+) -> Conversation:
 
         conversation = Conversation(
             title=conversation_data.title,

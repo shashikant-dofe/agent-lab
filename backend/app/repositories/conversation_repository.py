@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from sqlalchemy.orm import Session
-
+from sqlalchemy import select
 from app.models.conversation import Conversation
 from app.schemas.conversation import (
     ConversationCreate,
@@ -27,23 +27,26 @@ class ConversationRepository:
 
         return conversation
     def get_all(self) -> list[Conversation]:
-        return (
-            self.db.query(Conversation)
+        stmt = (
+            select(Conversation)
             .order_by(Conversation.created_at.desc())
-            .all()
         )
-    def get_by_id(
-        self,
-        conversation_id: UUID,
-    ) -> Conversation | None:
 
-        return (
-            self.db.query(Conversation)
-            .filter(
-                Conversation.id == conversation_id
-            )
-            .first()
+        result = self.db.execute(stmt)
+
+        return result.scalars().all()
+    def get_by_id(
+    self,
+    conversation_id: UUID,
+) -> Conversation | None:
+
+        stmt = select(Conversation).where(
+            Conversation.id == conversation_id
         )
+
+        result = self.db.execute(stmt)
+
+        return result.scalar_one_or_none()
     def update(
         self,
         conversation: Conversation,
